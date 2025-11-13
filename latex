@@ -1,4 +1,4 @@
-#!/opt/local/bin/fish
+#!/usr/bin/env fish
 
 function latexmk -a options 
 	# eval is used to re-parse the options string, separating arguments
