@@ -1,0 +1,58 @@
+#!/opt/local/bin/fish
+
+function latexmk -a options file
+	# eval is used to re-parse the options string, separating arguments
+	eval docker run -v .:/workspace -w /workspace texlive/texlive:latest-doc latexmk \
+		$options \
+		$file
+end
+
+switch $argv[1]
+	case new
+		if test (count $argv) -ge 2
+   			set dir $argv[2]
+		else
+			set dir (pwd)
+		end
+
+		if test -e $dir
+			if not find $dir -empty 
+   				echo "Error: directory not empty"
+				return 1
+			end
+		else
+			mkdir -p $dir
+		end
+
+		set script_path (realpath (status --current-filename))
+		set script_dir (dirname $script_path)
+
+		cp $script_dir/templates/* $dir
+
+	case build
+		latexmk "-verbose -halt-on-error -file-line-error -synctex=1 --shell-escape" $argv[2]
+	
+	case clean1
+		latexmk -c
+
+	case clean2
+		latexmk -C
+
+	case clean3
+		rm -rf ./build
+
+	case help '*'
+		echo Usage: latex COMMAND [INPUT]
+		echo
+		echo Commands:
+		echo \t'new      Initialise a new project from template'
+		echo \t'         Expects an empty directory or creates one at INPUT, or CWD if missing'
+		echo \t'build    Build project in CWD using latexmk with a set of default options'
+		echo \t'         Compiles INPUT only if provided.'
+		echo \t'clean1   Run the latexmk clean command, keep output files'
+		echo \t'clean2   Run the latexmk clean command, delete output files'
+		echo \t'clean3   Delete the build directory completely'
+		echo \t'help     Print this help text.'
+end
+
+
