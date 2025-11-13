@@ -1,0 +1,9 @@
+# Set pdf_mode = 1 for PDF compilation with pdflatex
+# Set pdf_mode = 4 for PDF compilation with luatex
+$pdf_mode = 1;
+
+$aux_dir = "build";
+$out_dir = "build";
+
+$pdflatex = "pdflatex -halt-on-error -file-line-error -recorder -synctex=1 --shell-escape %O %S";
+$lualatex = "lualatex -halt-on-error -file-line-error -recorder -synctex=1 --shell-escape %O %S";
