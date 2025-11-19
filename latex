@@ -25,7 +25,7 @@ switch $argv[1]
 		set script_path (realpath (status --current-filename))
 		set script_dir (dirname $script_path)
 
-		cp $script_dir/templates/* $dir
+		cp -a $script_dir/templates/. $dir
 
 	case build
 		latexmk 
