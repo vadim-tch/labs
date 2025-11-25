@@ -28,7 +28,13 @@ switch $argv[1]
 		cp -a $script_dir/templates/. $dir
 
 	case build
-		latexmk 
+		if test (count $argv) -ge 2
+			set mainfile $argv[2]
+		else
+			set mainfile "main.tex"
+		end
+
+		latexmk $mainfile
 	
 	case clean1
 		latexmk -c
@@ -43,13 +49,14 @@ switch $argv[1]
 		echo Usage: latex COMMAND
 		echo
 		echo Commands:
-		echo \t'new [DIR]   Initialise a new project from template'
-		echo \t'            Expects an empty directory or creates one at DIR if present, or CWD'
-		echo \t'build       Build project in CWD using latexmk' 
-		echo \t'clean1      Run the latexmk clean command, keep output files'
-		echo \t'clean2      Run the latexmk clean command, delete output files'
-		echo \t'clean3      Delete the build directory completely'
-		echo \t'help        Print this help text'
+		echo \t'new [DIR]      Initialise a new project from template'
+		echo \t'               Expects an empty directory or creates one at DIR if present, or CWD'
+		echo \t'build [FILE]   Build project in CWD using latexmk'
+		echo \t'               Uses FILE as the main file if present, else main.tex'
+		echo \t'clean1         Run the latexmk clean command, keep output files'
+		echo \t'clean2         Run the latexmk clean command, delete output files'
+		echo \t'clean3         Delete the build directory completely'
+		echo \t'help           Print this help text'
 end
 
 
